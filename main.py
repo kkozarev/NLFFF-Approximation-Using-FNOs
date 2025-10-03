@@ -3,7 +3,6 @@ from neuralop.models import TFNO
 import torch
 
 from train.trainer import PhysicsInformedLoss, Trainer
-from torch.utils.tensorboard import SummaryWriter
 
 if __name__ == "__main__":
     with open("config.json") as config_data:

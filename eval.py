@@ -1,5 +1,4 @@
 import json
-import numpy as np
 import torch
 from data.test_file_loader import TestFileLoader
 from model.evaluation import evaluate_magnetic_fields

@@ -2,8 +2,6 @@ import drms
 import numpy as np
 from sunpy.map import Map
 from astropy.io import fits
-from astropy.time import Time
-from skimage.transform import resize
 
 class SDO_Downloader:
     def __init__(self, jsoc_email):
