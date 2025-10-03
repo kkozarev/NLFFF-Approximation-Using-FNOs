@@ -71,15 +71,17 @@ class SDO_Downloader:
         hmi_number_of_pixels_x, hmi_number_of_pixels_y, hmi_number_of_pixels_z = hmi_data.shape
 
         #print(hmi_header['CUNIT1'])
-        pixel_size_deg = hmi_header['CDELT1']  # degrees per pixel
-        pixel_size_radians = np.deg2rad(pixel_size_deg)
+        pixel_size_deg_x, pixel_size_deg_y = hmi_header['CDELT1'], hmi_header['CDELT2']  # degrees per pixel
 
-        pixel_size_linear = solar_radius * pixel_size_radians
+        pixel_size_radians_x, pixel_size_deg_y = np.deg2rad(pixel_size_deg_x), np.deg2rad(pixel_size_deg_y)
 
-        x = np.linspace(0, (hmi_number_of_pixels_x-1)*pixel_size_linear, hmi_number_of_pixels_x)
-        y = np.linspace(0, (hmi_number_of_pixels_y-1)*pixel_size_linear, hmi_number_of_pixels_y)
+        pixel_size_linear_x = solar_radius * pixel_size_radians_x  # in Mm
+        pixel_size_linear_y = solar_radius * pixel_size_deg_y  # in Mm
+
+        x = np.linspace(0, (hmi_number_of_pixels_x-1)*pixel_size_linear_x, hmi_number_of_pixels_x)
+        y = np.linspace(0, (hmi_number_of_pixels_y-1)*pixel_size_linear_y, hmi_number_of_pixels_y)
 
         model_input = hmi_data[:, :, np.newaxis, :]
 
         model_input = model_input.transpose(3, 0, 1, 2)
-        return model_input, x, y, pixel_size_linear, pixel_size_linear
+        return model_input, x, y, pixel_size_linear_x, pixel_size_linear_y
