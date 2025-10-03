@@ -96,25 +96,26 @@ class Plotter:
         hmi_map, hmi_header, hmi_data = self.sdo_downloader.get_hmi_map(datetime, harp_num)
         input, x, y, dx, dy = self.sdo_downloader.get_model_input(hmi_header, hmi_data)
         B_ext = self.__get_b_extrapolated(torch.tensor(input, dtype=torch.float32))
+        
         Bz0 = B_ext[2, :, :, 0]
 
         field_lines = self.__get_tracer_lines(B_ext, Bz0, mask_threshold=mask_threshold)
 
-        aia_map = self.sdo_downloader.get_aia_map(datetime, wavelength=171).reproject_to(hmi_map.wcs).resample([512, 256] * u.pixel)
-        hmi_map = hmi_map.resample([512, 256] * u.pixel)
+        aia_map = self.sdo_downloader.get_aia_map(datetime, wavelength=171)
+        aia_map_cropped = aia_map.reproject_to(hmi_map.wcs)
 
-        self.__plot(hmi_map, aia_map, x, y, dx, dy, field_lines)
+        self.__plot(hmi_map, aia_map_cropped, x, y, dx, dy, field_lines)
 
 
 if __name__ == '__main__':
     jsoc_email = "martinnedev07@gmail.com"
 
     plotter = Plotter(jsoc_email)
-    #plotter(datetime="2024.01.15_00:00:00", harp_num=10634, mask_threshold=400, stride=20) 
-    plotter(datetime="2024.04.15_00:00:00", harp_num=11054, mask_threshold=450) 
-    #plotter(datetime="2024.07.19_00:00:00", harp_num=11560, mask_threshold=400, stride=20) 
-    #plotter(datetime="2024.08.14_00:00:00", harp_num=11689, mask_threshold=500, stride=20) 
-    #plotter(datetime="2022.02.17_00:00:00", harp_num=8013, mask_threshold=700, stride=20) 
+    plotter(datetime="2024.01.15_00:00:00", harp_num=10634, mask_threshold=400) 
+    #plotter(datetime="2024.04.15_00:00:00", harp_num=11054, mask_threshold=450) 
+    #plotter(datetime="2024.07.19_00:00:00", harp_num=11560, mask_threshold=400) 
+    #plotter(datetime="2024.08.14_00:00:00", harp_num=11689, mask_threshold=500) 
+    #plotter(datetime="2022.02.17_00:00:00", harp_num=8013, mask_threshold=700) 
 
 
 

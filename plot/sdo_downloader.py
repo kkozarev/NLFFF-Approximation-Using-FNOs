@@ -67,11 +67,8 @@ class SDO_Downloader:
         return aia_map
 
     def get_model_input(self, hmi_header, hmi_data):
-        nx = 512
-        ny = 256
-
         solar_radius = 696 # in Mm
-        hmi_nx, hmi_ny, hmi_nz = hmi_data.shape
+        hmi_number_of_pixels_x, hmi_number_of_pixels_y, hmi_number_of_pixels_z = hmi_data.shape
 
         #print(hmi_header['CUNIT1'])
         pixel_size_deg = hmi_header['CDELT1']  # degrees per pixel
@@ -79,16 +76,10 @@ class SDO_Downloader:
 
         pixel_size_linear = solar_radius * pixel_size_radians
 
-        dx = (hmi_nx/nx)*pixel_size_linear
-        dy = (hmi_ny/ny)*pixel_size_linear
+        x = np.linspace(0, (hmi_number_of_pixels_x-1)*pixel_size_linear, hmi_number_of_pixels_x)
+        y = np.linspace(0, (hmi_number_of_pixels_y-1)*pixel_size_linear, hmi_number_of_pixels_y)
 
-        x = np.linspace(0, (nx-1)*dx, nx)
-        y = np.linspace(0, (ny-1)*dy, ny)
-
-        #model_input shape: (512, 256, 3)
-        model_input = resize(hmi_data, (nx, ny, 3))
-
-        model_input = model_input[:, :, None, :]
+        model_input = hmi_data[:, :, np.newaxis, :]
 
         model_input = model_input.transpose(3, 0, 1, 2)
-        return model_input, x, y, dx, dy
+        return model_input, x, y, pixel_size_linear, pixel_size_linear
