@@ -1,0 +1,29 @@
+{
+    "model": {
+        "n_modes": [10, 10, 10],
+        "in_channels": 1,
+        "out_channels": 256,
+        "hidden_channels": 32,
+        "n_layers": 8,
+        "model_path": "./trained_models/fno_model/best_model.pt"
+    },
+    "model_save_path": "./trained_models/fno_model",
+    "nc_files_extractor":{
+        "nc_files_path": "./ISEE_NLFFF_Data/downloads",
+        "save_input_path": "./ISEE_NLFFF_Data/train/input",
+        "save_label_path": "./ISEE_NLFFF_Data/train/label"
+    },
+    
+    
+    "data": {
+        "dataset_path": "./ISEE_NLFFF_Data/train",
+        "val_path": "./ISEE_NLFFF_Data/validation",
+        "test_path": "./ISEE_NLFFF_Data/test",
+        "b_ground": 1500.0
+    },
+    
+    "training": {
+        "n_epochs": 100,
+        "loss_weights": { "w_mse": 5.0, "w_bc_bottom": 20.0, "w_ff": 150.0, "w_div": 100.0 }
+    }
+}
